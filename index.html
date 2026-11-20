@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>Mi Entrenador de Entrevista Técnica | Practicante Sistemas & ADSO - Convocatoria CUC</title>
+  <meta name="description" content="Plataforma interactiva personal de preparación técnica para la vacante de Practicante de Sistemas y Desarrollo de Software en la Universidad de la Costa (CUC)">
+  
+  <!-- Mobile & PWA meta tags -->
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cuc: {
+              red: '#B91C1C',
+              darkred: '#991B1B',
+              crimson: '#7F1D1D',
+              yellow: '#F59E0B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Estilos Personalizados -->
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+<body class="bg-[#0b0f19] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-red-600 selection:text-white">
+
+  <!-- TOP BANNER (ENTRENADOR PERSONAL) -->
+  <div class="bg-gradient-to-r from-red-900 via-red-700 to-amber-700 text-white text-xs sm:text-sm py-2 px-4 shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center justify-center bg-white text-red-700 font-extrabold text-[10px] px-2 py-0.5 rounded shadow uppercase tracking-wider">ENTRENADOR PERSONAL</span>
+        <span class="font-semibold tracking-wide text-xs sm:text-sm truncate">Mi Simulador de Entrevista: Sistemas / ADSO</span>
+      </div>
+      <div class="hidden md:flex items-center gap-3 text-xs font-medium text-red-100">
+        <span class="bg-red-950/70 px-2.5 py-0.5 rounded border border-red-500/30 text-amber-300 font-semibold">
+          Modo Práctica Intensiva (ADSO & Git)
+        </span>
+        <span class="text-slate-200">Preparación para la Convocatoria de la CUC</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER & APP BRAND -->
+  <header class="border-b border-slate-800 bg-[#0f172a]/95 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Logo / Titulo -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center shadow-lg shadow-red-900/40 border border-red-500/30 shrink-0">
+            <i data-lucide="terminal" class="w-5 h-5 sm:w-6 sm:h-6 text-white"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-extrabold text-base sm:text-xl text-white tracking-tight">CUC TechPrep <span class="text-red-500 font-bold">PRO</span></h1>
+              <span class="hidden sm:inline-block text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20">Edición Sistemas & ADSO</span>
+            </div>
+            <p class="text-xs text-slate-400 hidden sm:block">Plataforma personal de entrenamiento para dominar la entrevista técnica en Sistemas, Software, Git & IA</p>
+          </div>
+        </div>
+
+        <!-- Acciones Header (Simulador + Botón Menú Móvil) -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <a href="#simulador" onclick="document.querySelector('[data-target=\'simulador\']').click()" class="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-semibold px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl transition-all shadow-md shadow-red-900/40 pulse-glow shrink-0">
+            <i data-lucide="play-circle" class="w-4 h-4"></i>
+            <span class="hidden xs:inline">Simulador</span><span class="xs:hidden">Simulador</span>
+          </a>
+
+          <!-- Botón Menú Hamburguesa Móvil (Abre Drawer de 8 pestañas) -->
+          <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors focus:outline-none border border-slate-700" aria-label="Abrir menú de navegación">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- MAIN NAVIGATION TABS (DESKTOP WRAP & MOBILE HORIZONTAL TOUCH SCROLL) -->
+      <nav class="flex items-center overflow-x-auto scrollbar-none snap-x md:flex-wrap gap-1.5 sm:gap-2 pb-3 pt-2 text-xs sm:text-sm border-t border-slate-800/80 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <button data-target="radiografia" class="nav-btn bg-red-600 text-white shadow-lg shadow-red-900/50 px-3 sm:px-3.5 py-2 rounded-lg font-medium flex items-center gap-2 shrink-0 transition-all snap-start">
+          <i data-lucide="file-search" class="w-4 h-4"></i>
+          <span>1. Radiografía Vacante</span>
+        </button>
+
+        <button data-target="preguntas" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 px-3 sm:px-3.5 py-2 rounded-lg font-medium flex items-center gap-2 shrink-0 transition-all snap-start">
+          <i data-lucide="message-square-code" class="w-4 h-4"></i>
+          <span>2. Banco de Preguntas</span>
+        </button>
+
+        <button data-target="simulador" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 px-3 sm:px-3.5 py-2 rounded-lg font-medium flex items-center gap-2 shrink-0 transition-all snap-start">
+          <i data-lucide="mic" class="w-4 h-4"></i>
+          <span>3. Simulador de Entrevista</span>
+        </button>
+
+        <button data-target="test-tecnico" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 px-3 sm:px-3.5 py-2 rounded-lg font-medium flex items-center gap-2 shrink-0 transition-all snap-start">
+          <i data-lucide="check-square" class="w-4 h-4"></i>
+          <span>4. Test Técnico (Quiz)</span>
+        </button>
+
+        <button data-target="laboratorio" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 px-3 sm:px-3.5 py-2 rounded-lg font-medium flex items-center gap-2 shrink-0 transition-all snap-start">
+          <i data-lucide="code-2" class="w-4 h-4"></i>
+          <span>5. Retos Código & IA</span>
+        </button>
+
+        <button data-target="pitch" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 px-3 sm:px-3.5 py-2 rounded-lg font-medium flex items-center gap-2 shrink-0 transition-all snap-start">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>6. Constructor de Pitch</span>
+        </button>
+
+        <button data-target="estrategia" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 px-3 sm:px-3.5 py-2 rounded-lg font-medium flex items-center gap-2 shrink-0 transition-all snap-start">
+          <i data-lucide="target" class="w-4 h-4"></i>
+          <span>7. Estrategia & Checklist</span>
+        </button>
+
+        <button data-target="adso-git" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 px-3 sm:px-3.5 py-2 rounded-lg font-medium flex items-center gap-2 shrink-0 transition-all snap-start">
+          <i data-lucide="terminal" class="w-4 h-4"></i>
+          <span>8. Guía ADSO, Git & Terminal</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MODAL / DRAWER MÓVIL Y TABLET (8 MÓDULOS COMPLETOS) -->
+  <div id="mobile-drawer" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+    <!-- Backdrop oscuro con blur -->
+    <div id="drawer-backdrop" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity"></div>
+    
+    <!-- Panel deslizable / Menú lateral -->
+    <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-[#0f172a] border-l border-slate-800 shadow-2xl p-5 flex flex-col justify-between overflow-y-auto z-10">
+      <div>
+        <!-- Cabecera del Drawer -->
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white">
+              <i data-lucide="terminal" class="w-4 h-4"></i>
+            </div>
+            <span class="font-bold text-white text-base">Módulos de Práctica</span>
+          </div>
+          <button id="close-drawer-btn" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Cerrar menú">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Lista de 8 Módulos táctiles -->
+        <nav class="mt-4 space-y-1.5">
+          <button data-target="radiografia" class="nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-colors bg-red-600 text-white shadow-lg shadow-red-900/50">
+            <i data-lucide="file-search" class="w-4 h-4"></i>
+            <span>1. Radiografía Vacante</span>
+          </button>
+          <button data-target="preguntas" class="nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200">
+            <i data-lucide="message-square-code" class="w-4 h-4"></i>
+            <span>2. Banco de Preguntas</span>
+          </button>
+          <button data-target="simulador" class="nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200">
+            <i data-lucide="mic" class="w-4 h-4"></i>
+            <span>3. Simulador de Entrevista</span>
+          </button>
+          <button data-target="test-tecnico" class="nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200">
+            <i data-lucide="check-square" class="w-4 h-4"></i>
+            <span>4. Test Técnico (Quiz)</span>
+          </button>
+          <button data-target="laboratorio" class="nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200">
+            <i data-lucide="code-2" class="w-4 h-4"></i>
+            <span>5. Retos Código & IA</span>
+          </button>
+          <button data-target="pitch" class="nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>6. Constructor de Pitch</span>
+          </button>
+          <button data-target="estrategia" class="nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200">
+            <i data-lucide="target" class="w-4 h-4"></i>
+            <span>7. Estrategia & Checklist</span>
+          </button>
+          <button data-target="adso-git" class="nav-btn w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-colors text-slate-400 hover:bg-slate-800 hover:text-slate-200">
+            <i data-lucide="terminal" class="w-4 h-4"></i>
+            <span>8. Guía ADSO, Git & Terminal</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Footer del Drawer -->
+      <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 space-y-2">
+        <div class="flex items-center justify-between">
+          <span>Modo Práctica:</span>
+          <span class="text-emerald-400 font-semibold">100% Offline / Web</span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-relaxed">
+          Optimizado para smartphones y tablets. Tu centro de entrenamiento para la vacante en CUC.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-28 md:pb-8">
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 1: RADIOGRAFÍA DE LA VACANTE (CUC) -->
+    <!-- ======================================================== -->
+    <section id="radiografia" class="tab-section space-y-8">
+      
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-red-950 p-6 sm:p-8 border border-red-900/40 shadow-2xl">
+        <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div class="space-y-3 max-w-2xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/20 border border-red-500/30 text-red-400 text-xs font-semibold uppercase tracking-wider">
+              <i data-lucide="briefcase" class="w-3.5 h-3.5"></i> Perfil de la Convocatoria CUC
+            </div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Practicante en Sistemas & Desarrollo de Software (ADSO)
+            </h2>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Guía y mapa de preparación para la vacante de la <strong>Universidad de la Costa (CUC)</strong>. Descubre exactamente qué evalúa el comité técnico y cómo destacar como el candidato ideal sin necesidad de años de experiencia previa.
+            </p>
+          </div>
+
+          <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-800 text-xs space-y-2.5 w-full sm:w-auto min-w-[280px]">
+            <div class="flex justify-between items-center text-slate-400">
+              <span>Organización Destino:</span>
+              <span class="text-white font-semibold">Universidad de la Costa (CUC)</span>
+            </div>
+            <div class="flex justify-between items-center text-slate-400">
+              <span>Área de la Vacante:</span>
+              <span class="text-amber-400 font-semibold">Unidad GTA</span>
+            </div>
+            <div class="flex justify-between items-center text-slate-400">
+              <span>Perfil Requerido:</span>
+              <span class="text-emerald-400 font-semibold">Sistemas / ADSO / Afines</span>
+            </div>
+            <div class="flex justify-between items-center text-slate-400">
+              <span>Enfoque Clave:</span>
+              <span class="text-purple-400 font-semibold">Programación, Git, ADSO & IA</span>
+            </div>
+            <div class="pt-2 border-t border-slate-800 flex justify-between items-center text-slate-400">
+              <span>Objetivo de este Hub:</span>
+              <span class="text-emerald-400 font-semibold text-[11px]">Entrenamiento Técnico Personal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desglose de los 4 Requisitos del Flyer -->
+      <div>
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <i data-lucide="compass" class="w-5 h-5 text-red-500"></i>
+          Los 4 Pilares Evaluados según el Flyer de la Convocatoria
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          
+          <!-- Pilar 1 -->
+          <div class="glass-card p-5 rounded-xl border border-slate-800 relative flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mb-4 text-blue-400 font-bold">
+                <i data-lucide="check" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-1">Sin Amplia Experiencia</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                El flyer aclara: <em>"No es necesario contar con amplia experiencia"</em>. Lo que realmente evalúan es tu <strong>potencial</strong>, curiosidad y fundamentos claros, no que hayas trabajado 5 años en una multinacional.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-blue-400 font-medium">
+              💡 Tip: Resalta proyectos universitarios y de autoaprendizaje.
+            </div>
+          </div>
+
+          <!-- Pilar 2 -->
+          <div class="glass-card p-5 rounded-xl border border-slate-800 relative flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-4 text-emerald-400 font-bold">
+                <i data-lucide="code" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-1">Bases en Algún Lenguaje</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Dominar al menos un lenguaje (Python, JavaScript, Java, C#, etc.). Te preguntarán sobre estructuras de datos, lógica algorítmica, POO, requerimientos ADSO y bases de datos.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-400 font-medium">
+              💡 Tip: Elige tu lenguaje más fuerte y no titubees al explicarlo.
+            </div>
+          </div>
+
+          <!-- Pilar 3 -->
+          <div class="glass-card p-5 rounded-xl border border-slate-800 relative flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mb-4 text-purple-400 font-bold">
+                <i data-lucide="cpu" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-1">Herramientas de IA</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Punto diferenciador explícito del flyer: <em>"Interés o conocimientos básicos en IA"</em>. Quieren saber si usas Copilot, ChatGPT, Gemini, si entiendes qué es un LLM, Prompting o cómo conectar una API de IA.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-purple-400 font-medium">
+              💡 Tip: Este es tu mayor as bajo la manga para ganar la plaza.
+            </div>
+          </div>
+
+          <!-- Pilar 4 -->
+          <div class="glass-card p-5 rounded-xl border border-slate-800 relative flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400 font-bold">
+                <i data-lucide="flame" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-white text-base mb-1">Actitud y Proactividad</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Ganas de aprender, saber comunicarse, no quedarse paralizado ante un error y tener iniciativa. Para la CUC, un practicante con buena actitud aprende cualquier tecnología en poco tiempo.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-amber-400 font-medium">
+              💡 Tip: Prepara anécdotas de superación con el método STAR.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Lo que ofrece la CUC y cómo alinear tu discurso -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="glass-panel p-6 rounded-2xl border border-slate-800">
+          <h4 class="text-base sm:text-lg font-bold text-white mb-3 flex items-center gap-2">
+            <i data-lucide="gift" class="w-5 h-5 text-amber-400"></i>
+            ¿Qué ofrece la CUC y por qué debe interesarte?
+          </h4>
+          <ul class="space-y-3 text-xs sm:text-sm text-slate-300">
+            <li class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs shrink-0 mt-0.5">✔</span>
+              <span><strong>Experiencia real en proyectos:</strong> No serás quien solo trae el café; la Unidad GTA desarrolla y mantiene plataformas de impacto para miles de estudiantes y docentes.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs shrink-0 mt-0.5">✔</span>
+              <span><strong>Acompañamiento y aprendizaje continuo:</strong> Tendrás tutores y líderes técnicos dispuestos a guiarte en buenas prácticas de ingeniería de software.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs shrink-0 mt-0.5">✔</span>
+              <span><strong>Posibilidad de crecimiento:</strong> Los practicantes destacados con frecuencia continúan vinculados como ingenieros de desarrollo junior.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-slate-800">
+          <h4 class="text-base sm:text-lg font-bold text-white mb-3 flex items-center gap-2">
+            <i data-lucide="award" class="w-5 h-5 text-red-500"></i>
+            Estructura de la Entrevista Técnica Típica
+          </h4>
+          <div class="space-y-3 text-xs sm:text-sm">
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="font-semibold text-slate-200">1. Rompehielo & Pitch ("Háblame de ti")</span>
+              <span class="text-slate-400 font-mono">5 - 10 min</span>
+            </div>
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="font-semibold text-slate-200">2. Requisitos ADSO, Lógica & Fundamentos</span>
+              <span class="text-slate-400 font-mono">15 - 20 min</span>
+            </div>
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="font-semibold text-slate-200">3. Control de Versiones Git, Entornos & Terminal</span>
+              <span class="text-slate-400 font-mono">10 min</span>
+            </div>
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="font-semibold text-slate-200">4. Exploración de Inteligencia Artificial & Herramientas</span>
+              <span class="text-slate-400 font-mono">10 min</span>
+            </div>
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="font-semibold text-slate-200">5. Preguntas del Candidato al Entrevistador</span>
+              <span class="text-slate-400 font-mono">5 min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 2: BANCO DE PREGUNTAS MAESTRAS (51 PREGUNTAS) -->
+    <!-- ======================================================== -->
+    <section id="preguntas" class="tab-section hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold text-white">Banco Maestro de Preguntas & Respuestas Modelo (51 Preguntas)</h2>
+          <p class="text-xs sm:text-sm text-slate-400">51 preguntas exhaustivas clasificadas por áreas técnicas: ADSO, Git/GitHub, Entornos Locales, Programación, IA y Habilidades Blandas.</p>
+        </div>
+
+        <div class="relative min-w-[240px]">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+          <input type="text" id="question-search" placeholder="Buscar por tema, palabra..." class="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-red-500">
+        </div>
+      </div>
+
+      <!-- Categorías Filters con conteo dinámico -->
+      <div class="flex flex-wrap gap-2">
+        <button class="question-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600 text-white transition-all" data-filter="all">
+          Todas (51)
+        </button>
+        <button class="question-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-all" data-filter="programacion">
+          💻 Programación (12)
+        </button>
+        <button class="question-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-all" data-filter="adso">
+          📐 ADSO & Requisitos (7)
+        </button>
+        <button class="question-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-all" data-filter="git_entornos">
+          🌿 Git, GitHub & Entornos (8)
+        </button>
+        <button class="question-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-all" data-filter="ia">
+          🤖 Inteligencia Artificial (10)
+        </button>
+        <button class="question-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-all" data-filter="blandas">
+          🤝 Habilidades Blandas (8)
+        </button>
+        <button class="question-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white transition-all" data-filter="casos">
+          🏛️ Casos Prácticos (6)
+        </button>
+      </div>
+
+      <!-- Preguntas Container -->
+      <div id="questions-container" class="space-y-4">
+        <!-- Renderizado dinámico desde data.js -->
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 3: SIMULADOR DE ENTREVISTA EN VIVO -->
+    <!-- ======================================================== -->
+    <section id="simulador" class="tab-section hidden space-y-6">
+      
+      <!-- Setup del simulador -->
+      <div id="sim-setup" class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 max-w-2xl mx-auto text-center space-y-6">
+        <div class="w-16 h-16 rounded-2xl bg-red-600/20 border border-red-500/40 text-red-500 flex items-center justify-center mx-auto shadow-lg shadow-red-950/50">
+          <i data-lucide="mic" class="w-8 h-8"></i>
+        </div>
+
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Simulador de Entrevista en Tiempo Real</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-lg mx-auto">
+            Entrena bajo condiciones reales de entrevista técnica. El sistema te formulará preguntas de manera aleatoria, cronometrará tu respuesta, leerá en voz alta las preguntas y te permitirá autoevaluarte.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-md mx-auto">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Número de preguntas:</label>
+            <select id="sim-count-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+              <option value="3">3 preguntas (Sesión Rápida - 10 min)</option>
+              <option value="5" selected>5 preguntas (Entrevista Estándar - 20 min)</option>
+              <option value="10">10 preguntas (Simulación Completa)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Enfoque temático:</label>
+            <select id="sim-category-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+              <option value="all">Todas las áreas mezcladas (Recomendado)</option>
+              <option value="adso">Solo ADSO & Ciclo del Software</option>
+              <option value="git_entornos">Solo Git, GitHub & Entornos Locales</option>
+              <option value="programacion">Solo Programación & Bases de Datos</option>
+              <option value="ia">Solo Inteligencia Artificial & Herramientas</option>
+              <option value="blandas">Solo Habilidades Blandas & Fit Cultural</option>
+              <option value="casos">Solo Casos Prácticos Universitarios</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-2 text-xs text-slate-400">
+          <input type="checkbox" id="sim-autospeech-check" class="rounded bg-slate-800 border-slate-700 text-red-600 focus:ring-0" checked>
+          <label for="sim-autospeech-check" class="cursor-pointer">Activar lectura de voz automática del entrevistador (Text-To-Speech)</label>
+        </div>
+
+        <button id="start-sim-btn" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm tracking-wide shadow-xl shadow-red-900/50 transition-all flex items-center justify-center gap-2 mx-auto">
+          <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+          <span>Comenzar Simulación Ahora</span>
+        </button>
+      </div>
+
+      <!-- Pantalla activa del simulador -->
+      <div id="sim-active" class="hidden glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 max-w-3xl mx-auto space-y-6">
+        
+        <!-- Header del simulador -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="text-xs px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-bold">
+              Pregunta <span id="sim-current-num" class="text-red-400">1</span> de <span id="sim-total-num">5</span>
+            </span>
+            <span id="sim-category-badge" class="text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-semibold">
+              Programación
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-slate-700 font-mono text-sm text-amber-400">
+            <i data-lucide="clock" class="w-4 h-4"></i>
+            <span id="sim-timer">00:00</span>
+          </div>
+        </div>
+
+        <!-- Tarjeta de la pregunta -->
+        <div class="bg-slate-950/70 p-6 rounded-2xl border border-slate-800 text-center space-y-4">
+          <span class="text-xs text-slate-400 uppercase tracking-widest font-bold">El Entrevistador te pregunta:</span>
+          <h3 id="sim-question-text" class="text-lg sm:text-2xl font-bold text-white leading-snug">
+            Cargando pregunta...
+          </h3>
+
+          <div class="flex justify-center gap-3 pt-2">
+            <button id="sim-speak-btn" class="text-xs px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center gap-2 transition-colors">
+              <i data-lucide="volume-2" class="w-4 h-4"></i>
+              <span>Repetir pregunta en voz alta</span>
+            </button>
+            <button id="sim-hint-btn" class="text-xs px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20 text-amber-300 flex items-center gap-2 transition-colors">
+              <i data-lucide="help-circle" class="w-4 h-4"></i>
+              <span>Ver pistas / respuesta modelo</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pista colapsable -->
+        <div id="sim-hint-box" class="hidden p-4 rounded-xl bg-slate-900/90 border border-amber-500/30 text-xs text-slate-300 space-y-2">
+          <div class="font-bold text-amber-400 flex items-center gap-1.5">
+            <i data-lucide="lightbulb" class="w-4 h-4"></i> Guía y Respuesta Modelo:
+          </div>
+          <p id="sim-hint-text" class="whitespace-pre-line leading-relaxed text-slate-300"></p>
+        </div>
+
+        <!-- Área de notas del usuario -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center justify-between">
+            <span>Tus notas y puntos clave que respondiste (para evaluarte luego):</span>
+            <span class="text-[10px] text-slate-500">Se guardan automáticamente</span>
+          </label>
+          <textarea id="sim-notes-input" rows="3" placeholder="Escribe aquí los conceptos que mencionaste, tus dudas o cómo estructuraste tu respuesta..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-red-500 resize-none"></textarea>
+        </div>
+
+        <!-- Autoevaluación con estrellas -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 bg-slate-900/40 p-3.5 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-300 font-medium">¿Qué tan seguro y claro te sentiste respondiendo esta pregunta?</span>
+          <div class="flex items-center gap-1">
+            <button class="sim-star-btn text-slate-600 hover:text-amber-400 p-1" data-value="1">★</button>
+            <button class="sim-star-btn text-slate-600 hover:text-amber-400 p-1" data-value="2">★</button>
+            <button class="sim-star-btn text-slate-600 hover:text-amber-400 p-1" data-value="3">★</button>
+            <button class="sim-star-btn text-slate-600 hover:text-amber-400 p-1" data-value="4">★</button>
+            <button class="sim-star-btn text-slate-600 hover:text-amber-400 p-1" data-value="5">★</button>
+          </div>
+        </div>
+
+        <!-- Botones de navegación del simulador -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+          <button id="sim-prev-btn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+            Anterior
+          </button>
+          
+          <div class="flex gap-2">
+            <button id="sim-next-btn" class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-bold shadow-md shadow-red-900/40 transition-all flex items-center gap-1.5">
+              <span>Siguiente Pregunta</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+            <button id="sim-finish-btn" class="hidden px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-md shadow-emerald-900/40 transition-all flex items-center gap-1.5">
+              <span>Finalizar Simulación</span>
+              <i data-lucide="check" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Resumen final del simulador -->
+      <div id="sim-summary" class="hidden glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 max-w-2xl mx-auto space-y-6 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-950/50">
+          <i data-lucide="award" class="w-8 h-8"></i>
+        </div>
+
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">¡Simulación de Entrevista Completada!</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-2">
+            Has completado la práctica intensiva. Revisa tu desempeño a continuación:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto">
+          <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+            <span class="text-xs text-slate-400 block mb-1">Tiempo Total</span>
+            <span id="summary-total-time" class="text-lg font-bold text-white font-mono">00m 00s</span>
+          </div>
+          <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+            <span class="text-xs text-slate-400 block mb-1">Calificación Promedio</span>
+            <span id="summary-avg-score" class="text-lg font-bold text-amber-400">4.5 / 5.0 ⭐</span>
+          </div>
+        </div>
+
+        <div class="text-left space-y-3">
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Detalle de tus respuestas:</h4>
+          <div id="summary-questions-list" class="space-y-3 max-h-72 overflow-y-auto pr-1">
+            <!-- Rellenado dinámico -->
+          </div>
+        </div>
+
+        <button id="sim-restart-btn" class="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all">
+          Iniciar Otra Simulación
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 4: TEST TÉCNICO INTERACTIVO (QUIZ) -->
+    <!-- ======================================================== -->
+    <section id="test-tecnico" class="tab-section hidden space-y-6">
+      
+      <!-- Quiz Intro -->
+      <div id="quiz-intro" class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 max-w-2xl mx-auto text-center space-y-6">
+        <div class="w-16 h-16 rounded-2xl bg-blue-500/20 border border-blue-500/40 text-blue-400 flex items-center justify-center mx-auto shadow-lg shadow-blue-950/50">
+          <i data-lucide="check-square" class="w-8 h-8"></i>
+        </div>
+
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Test Técnico de Conocimientos</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-md mx-auto">
+            10 preguntas diseñadas exactamente sobre los tópicos técnicos: <strong>Lógica de Algoritmos, SQL, APIs Web, Inteligencia Artificial, Git y POO</strong>.
+          </p>
+        </div>
+
+        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2 max-w-md mx-auto text-left">
+          <div class="flex items-center gap-2 text-slate-200 font-semibold">
+            <i data-lucide="info" class="w-4 h-4 text-blue-400"></i> Formato de la prueba:
+          </div>
+          <ul class="list-disc list-inside space-y-1 text-slate-400">
+            <li>10 preguntas de selección múltiple con única respuesta.</li>
+            <li>Retroalimentación y explicación detallada inmediata por cada pregunta.</li>
+            <li>Evaluación de nivel final con cálculo porcentual.</li>
+          </ul>
+        </div>
+
+        <button id="quiz-start-btn" class="px-8 py-3.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm tracking-wide shadow-xl shadow-red-900/50 transition-all">
+          Comenzar Test Técnico
+        </button>
+      </div>
+
+      <!-- Quiz Active -->
+      <div id="quiz-active" class="hidden glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 max-w-2xl mx-auto space-y-6">
+        
+        <!-- Progreso -->
+        <div>
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-400 mb-2">
+            <span>Pregunta <span id="quiz-q-num" class="text-red-400">1</span> de <span id="quiz-q-total">10</span></span>
+            <span id="quiz-topic-badge" class="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Algoritmos</span>
+          </div>
+          <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+            <div id="quiz-progress-bar" class="bg-red-600 h-full transition-width" style="width: 10%;"></div>
+          </div>
+        </div>
+
+        <!-- Pregunta -->
+        <div>
+          <h3 id="quiz-question-text" class="text-base sm:text-xl font-bold text-white leading-snug">
+            Cargando pregunta...
+          </h3>
+        </div>
+
+        <!-- Opciones -->
+        <div id="quiz-options-container" class="space-y-3">
+          <!-- Render dinámico -->
+        </div>
+
+        <!-- Retroalimentación -->
+        <div id="quiz-feedback-box" class="hidden">
+          <p id="quiz-feedback-text"></p>
+        </div>
+
+        <!-- Controles -->
+        <div class="pt-4 border-t border-slate-800 flex justify-end">
+          <button id="quiz-submit-btn" class="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all opacity-50 cursor-not-allowed" disabled>
+            Validar Respuesta
+          </button>
+          <button id="quiz-next-btn" class="hidden px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center gap-2">
+            <span>Siguiente Pregunta</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Quiz Results -->
+      <div id="quiz-results" class="hidden glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 max-w-2xl mx-auto text-center space-y-6">
+        <div class="w-16 h-16 rounded-2xl bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center mx-auto shadow-lg shadow-purple-950/50">
+          <i data-lucide="trophy" class="w-8 h-8"></i>
+        </div>
+
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Resultado del Test Técnico</h2>
+          <div class="mt-3">
+            <span id="quiz-final-score" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">0 / 10</span>
+          </div>
+          <div class="mt-2">
+            <span id="quiz-result-badge" class="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Nivel</span>
+          </div>
+          <p id="quiz-result-message" class="text-xs sm:text-sm text-slate-300 mt-3 max-w-md mx-auto leading-relaxed"></p>
+        </div>
+
+        <div class="text-left space-y-3">
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Desglose de Preguntas:</h4>
+          <div id="quiz-breakdown-list" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></div>
+        </div>
+
+        <button id="quiz-restart-btn" class="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all">
+          Intentar Nuevamente
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 5: LABORATORIO DE CÓDIGO & IA (15 RETOS PRÁCTICOS) -->
+    <!-- ======================================================== -->
+    <section id="laboratorio" class="tab-section hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-extrabold text-white">Laboratorio Práctico de Código & IA (15 Retos)</h2>
+          <p class="text-xs sm:text-sm text-slate-400">Resuelve y ejecuta en vivo ejercicios de algoritmia, requisitos ADSO, validación de ramas Git, variables .env, SQL y prompts de IA.</p>
+        </div>
+
+        <div class="min-w-[320px]">
+          <select id="challenge-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500 font-semibold">
+            <!-- Se puebla dinámicamente con los 15 retos desde app.js -->
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Enunciado y Solución Explicada -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-3">
+            <h3 id="challenge-title" class="text-lg font-bold text-white">Título del Reto</h3>
+            <p id="challenge-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line"></p>
+          </div>
+
+          <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-2">
+            <div class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
+              <i data-lucide="book-open" class="w-4 h-4"></i> Explicación Pedagógica & Criterio:
+            </div>
+            <p id="solution-explanation" class="text-xs text-slate-300 leading-relaxed"></p>
+          </div>
+        </div>
+
+        <!-- Editor de Código y Consola -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl flex flex-col">
+            
+            <!-- Barra superior del editor -->
+            <div class="bg-slate-900 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span class="text-xs text-slate-400 font-mono ml-2">sandbox_workspace</span>
+              </div>
+              <div class="flex gap-2">
+                <button id="reset-code-btn" class="text-xs text-slate-400 hover:text-white px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 transition-colors">
+                  Reiniciar
+                </button>
+                <button id="run-code-btn" class="text-xs bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-1 rounded flex items-center gap-1.5 transition-colors shadow-md">
+                  <i data-lucide="play" class="w-3.5 h-3.5 fill-white"></i>
+                  <span>Probar Solución</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Textarea de código -->
+            <textarea id="code-editor" class="w-full bg-[#0d1117] text-slate-100 font-mono text-xs sm:text-sm p-4 focus:outline-none resize-none leading-relaxed min-h-[250px]" spellcheck="false"></textarea>
+
+            <!-- Consola de Salida -->
+            <div class="bg-slate-950 border-t border-slate-800 p-4">
+              <div class="text-[11px] font-mono text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                <i data-lucide="terminal" class="w-3.5 h-3.5"></i> Consola de Ejecución & Pruebas
+              </div>
+              <div id="code-output" class="font-mono text-xs text-slate-300 min-h-[60px] bg-slate-900/60 p-3 rounded-xl border border-slate-800/80 overflow-x-auto">
+                <span class="text-slate-500">// Presiona "Probar Solución" para ejecutar</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 6: CONSTRUCTOR DE PITCH PERSONAL ("HÁBLAME DE TI") -->
+    <!-- ======================================================== -->
+    <section id="pitch" class="tab-section hidden space-y-6">
+      <div class="max-w-4xl mx-auto space-y-6">
+        <div>
+          <h2 class="text-2xl font-extrabold text-white">Constructor de Pitch Personal ("Háblame de ti")</h2>
+          <p class="text-xs sm:text-sm text-slate-400">
+            La primera pregunta de cualquier entrevista es <em>"Cuéntame sobre ti"</em>. Los evaluadores deciden en los primeros 90 segundos si eres un candidato entusiasta y preparado. Construye aquí tu guion perfecto adaptado a la vacante.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Formulario Guiado -->
+          <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="edit-3" class="w-4 h-4 text-red-500"></i> Tus Datos Clave
+            </h3>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Tu Nombre Completo:</label>
+              <input type="text" id="pitch-name" placeholder="Ej: Camilo Torres" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-red-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Carrera / Programa Académico:</label>
+              <input type="text" id="pitch-career" placeholder="Ej: Análisis y Desarrollo de Software (ADSO) / Ingeniería de Sistemas" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-red-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Tecnologías y bases que dominas:</label>
+              <input type="text" id="pitch-tech" placeholder="Ej: Python, JavaScript, Git Flow y PostgreSQL" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-red-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Tu experiencia o interés en IA:</label>
+              <input type="text" id="pitch-ai" placeholder="Ej: uso de GitHub Copilot, prompts para LLMs y APIs de Gemini" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-red-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Tu mayor fortaleza o valor diferencial:</label>
+              <input type="text" id="pitch-strength" placeholder="Ej: mi disciplina para aprender rápido y resolver errores complejos" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-red-500">
+            </div>
+
+            <div class="pt-2">
+              <button id="save-pitch-btn" class="w-full py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-2 shrink-0">
+                <i data-lucide="save" class="w-4 h-4"></i> 
+                <span>Guardar en este navegador</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Vista Previa del Discurso en Vivo -->
+          <div class="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i> Tu Discurso Listo (90 Segundos)
+                </h3>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">Estructura Ganadora</span>
+              </div>
+
+              <div id="pitch-preview-text" class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-line min-h-[260px]">
+                <!-- Se llena dinámicamente -->
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <button id="copy-pitch-btn" class="w-full py-3.5 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-red-900/40 transition-all flex items-center justify-center gap-2 shrink-0">
+                <i data-lucide="copy" class="w-4 h-4"></i> 
+                <span>Copiar Discurso al Portapapeles</span>
+              </button>
+              
+              <!-- Toast de confirmación -->
+              <div id="pitch-copy-toast" class="opacity-0 pointer-events-none transition-opacity text-center text-xs text-emerald-400 font-semibold py-1">
+                ¡Copiado con éxito!
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 7: ESTRATEGIA, CHECKLIST & PREGUNTAS CLAVE -->
+    <!-- ======================================================== -->
+    <section id="estrategia" class="tab-section hidden space-y-8">
+      
+      <!-- Preguntas Estratégicas que TÚ debes hacer -->
+      <div>
+        <h2 class="text-2xl font-extrabold text-white mb-2">Preguntas Estratégicas para el Entrevistador</h2>
+        <p class="text-xs sm:text-sm text-slate-400 mb-6">Al final de la entrevista técnica, te dirán: <em>"¿Tienes alguna pregunta para nosotros?"</em>. Haz una de estas preguntas para demostrar madurez e interés genuino:</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-2">
+            <span class="text-xs font-bold text-red-400 uppercase tracking-wider">Pregunta 1 &bull; Proyectos</span>
+            <p class="text-sm font-semibold text-white">"¿En qué proyectos o iniciativas prioritarias de la Unidad participará activamente el practicante seleccionado durante sus primeros meses?"</p>
+            <p class="text-xs text-slate-400 pt-2 border-t border-slate-800">Demuestra que estás pensando en cómo generar impacto desde el día uno.</p>
+          </div>
+
+          <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-2">
+            <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Pregunta 2 &bull; Tecnología e IA</span>
+            <p class="text-sm font-semibold text-white">"Dado el creciente interés en IA mencionado en la vacante, ¿qué casos de uso o herramientas tienen planeado implementar a corto plazo?"</p>
+            <p class="text-xs text-slate-400 pt-2 border-t border-slate-800">Conecta directamente con el requisito diferenciador del flyer de la vacante.</p>
+          </div>
+
+          <div class="glass-card p-5 rounded-xl border border-slate-800 space-y-2">
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Pregunta 3 &bull; Cultura & Crecimiento</span>
+            <p class="text-sm font-semibold text-white">"¿Cómo es la dinámica de mentoría y qué esperan ver en un practicante para considerarlo un caso de éxito al finalizar su período de prácticas?"</p>
+            <p class="text-xs text-slate-400 pt-2 border-t border-slate-800">Evidencia ganas reales de aprendizaje y compromiso con la excelencia.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checklist Interactivo 24h Antes -->
+      <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i> Checklist Definitivo Pre-Entrevista
+            </h3>
+            <p class="text-xs text-slate-400">Tu progreso se guarda automáticamente en este dispositivo.</p>
+          </div>
+          <div class="text-right">
+            <span id="checklist-count" class="text-xs font-mono font-bold text-emerald-400">0/8 completados (0%)</span>
+            <div class="w-36 bg-slate-800 h-2 rounded-full overflow-hidden mt-1">
+              <div id="checklist-progress-bar" class="bg-emerald-500 h-full transition-width" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+          
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-900 transition-colors">
+            <input type="checkbox" class="checklist-checkbox mt-1 rounded bg-slate-800 border-slate-700 text-red-600 focus:ring-0" data-check-id="check-1">
+            <span>Investigué sobre la institución, sus proyectos y su enfoque en innovación tecnológica.</span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-900 transition-colors">
+            <input type="checkbox" class="checklist-checkbox mt-1 rounded bg-slate-800 border-slate-700 text-red-600 focus:ring-0" data-check-id="check-2">
+            <span>Tengo claro mi lenguaje de programación principal (Python, JS, Java, etc.) y sé explicar POO y estructuras de datos.</span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-900 transition-colors">
+            <input type="checkbox" class="checklist-checkbox mt-1 rounded bg-slate-800 border-slate-700 text-red-600 focus:ring-0" data-check-id="check-3">
+            <span>Sé explicar cómo uso herramientas de Inteligencia Artificial (Copilot, LLMs, Prompts) de forma responsable y ética.</span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-900 transition-colors">
+            <input type="checkbox" class="checklist-checkbox mt-1 rounded bg-slate-800 border-slate-700 text-red-600 focus:ring-0" data-check-id="check-4">
+            <span>Practiqué mi Pitch Personal ("Háblame de ti") en voz alta hasta decirlo con naturalidad y seguridad.</span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-900 transition-colors">
+            <input type="checkbox" class="checklist-checkbox mt-1 rounded bg-slate-800 border-slate-700 text-red-600 focus:ring-0" data-check-id="check-5">
+            <span>Tengo a la mano mi repositorio de GitHub con proyectos universitarios o personales limpios y con README descriptivos.</span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-900 transition-colors">
+            <input type="checkbox" class="checklist-checkbox mt-1 rounded bg-slate-800 border-slate-700 text-red-600 focus:ring-0" data-check-id="check-6">
+            <span>Si la entrevista es virtual: probé mi cámara, micrófono, conexión a internet e iluminación adecuada.</span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-900 transition-colors">
+            <input type="checkbox" class="checklist-checkbox mt-1 rounded bg-slate-800 border-slate-700 text-red-600 focus:ring-0" data-check-id="check-7">
+            <span>Tengo anotadas al menos dos preguntas estratégicas para formularles al finalizar.</span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-900 transition-colors">
+            <input type="checkbox" class="checklist-checkbox mt-1 rounded bg-slate-800 border-slate-700 text-red-600 focus:ring-0" data-check-id="check-8">
+            <span>Descansé bien la noche anterior y mantengo una actitud positiva y proactiva.</span>
+          </label>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 8: GUÍA ADSO, GIT & CHEATSHEET DE COMANDOS LOCALES -->
+    <!-- ======================================================== -->
+    <section id="adso-git" class="tab-section hidden space-y-8">
+      
+      <!-- Banner Cabecera -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 p-6 sm:p-8 border border-indigo-900/40 shadow-2xl">
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold uppercase tracking-wider">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Cheat Sheet Técnico & Glosario
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Glosario ADSO, Comandos de Ejecución Local & Git Maestro
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+            Domina la terminología curricular del ADSO y los comandos de terminal más preguntados en pruebas técnicas: creación de entornos virtuales, gestión de dependencias (Node/Python), resolución de puertos bloqueados y flujo profesional de Git/GitHub.
+          </p>
+        </div>
+      </div>
+
+      <!-- Subsección 1: Glosario ADSO -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="layers" class="w-5 h-5 text-indigo-400"></i>
+          Conceptos y Terminología Fundamental ADSO (SENA / Sistemas)
+        </h3>
+        <div id="adso-glossary-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Render dinámico desde app.js -->
+        </div>
+      </div>
+
+      <!-- Subsección 2: Comandos de Terminal con copiado en 1 clic -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="terminal" class="w-5 h-5 text-red-500"></i>
+          Comandos de Ejecución Local, Entornos & Git (Haz clic en el botón de copiar para cada comando)
+        </h3>
+        <div id="terminal-commands-container" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <!-- Render dinámico desde app.js -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER PERSONAL -->
+  <footer class="border-t border-slate-800 bg-slate-950/80 py-6 text-center text-xs text-slate-500 mb-16 md:mb-0">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-400">CUC TechPrep PRO</span>
+        <span>&bull; Diseñado para preparar y superar la convocatoria de Practicante de Sistemas & ADSO</span>
+      </div>
+      <div class="text-slate-400">
+        <span>Mi Entrenador Personal de Entrevista Técnica &bull; <span class="text-red-400">Preparación para la Convocatoria CUC</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BOTTOM NAVIGATION DOCK (MÓVIL Y TABLET PEQUEÑA < 768px) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0f172a]/95 backdrop-blur-xl border-t border-slate-800/90 px-2 py-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom))] flex items-center justify-around shadow-2xl">
+    <button data-target="radiografia" class="nav-btn bg-red-600 text-white shadow-lg shadow-red-900/50 flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-[10px] font-medium min-w-[56px] transition-all">
+      <i data-lucide="file-search" class="w-4 h-4 mb-0.5"></i>
+      <span>Vacante</span>
+    </button>
+    <button data-target="preguntas" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-[10px] font-medium min-w-[56px] transition-all">
+      <i data-lucide="message-square-code" class="w-4 h-4 mb-0.5"></i>
+      <span>Preguntas</span>
+    </button>
+    <button data-target="simulador" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-[10px] font-medium min-w-[56px] transition-all">
+      <i data-lucide="mic" class="w-4 h-4 mb-0.5"></i>
+      <span>Simulador</span>
+    </button>
+    <button data-target="laboratorio" class="nav-btn text-slate-400 hover:bg-slate-800 hover:text-slate-200 flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-[10px] font-medium min-w-[56px] transition-all">
+      <i data-lucide="code-2" class="w-4 h-4 mb-0.5"></i>
+      <span>Código</span>
+    </button>
+    <button onclick="document.getElementById('mobile-menu-toggle').click()" class="flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-amber-400 hover:bg-slate-800 hover:text-amber-300 text-[10px] font-medium min-w-[56px] transition-all" aria-label="Abrir todos los módulos">
+      <i data-lucide="layout-grid" class="w-4 h-4 mb-0.5"></i>
+      <span>Módulos</span>
+    </button>
+  </nav>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
